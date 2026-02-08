@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HACCP Tracker</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div>
+      <p class="eyebrow">HACCP Tracker</p>
+      <h1>Archivio prodotti con supporto IA</h1>
+      <p class="subtitle">Inserisci e gestisci i prodotti con dati essenziali per la sicurezza alimentare.</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="card" aria-labelledby="add-product-title">
+      <div class="card-header">
+        <h2 id="add-product-title">Nuovo prodotto</h2>
+        <p>Scatta una foto della confezione per estrarre lotto e scadenza.</p>
+      </div>
+      <form id="product-form">
+        <div class="form-grid">
+          <label>
+            Nome prodotto
+            <input type="text" name="name" required placeholder="Es. Yogurt greco" />
+          </label>
+          <label>
+            Fornitore
+            <input type="text" name="supplier" required placeholder="Es. Latteria Alfa" />
+          </label>
+          <label>
+            Tipologia
+            <input type="text" name="category" required placeholder="Es. Latticini" />
+          </label>
+          <label>
+            Modalità di conservazione
+            <input type="text" name="storage" required placeholder="Es. +4°C, refrigerato" />
+          </label>
+          <label>
+            Foto confezione (IA)
+            <input type="file" name="photo" accept="image/*" capture="environment" />
+          </label>
+          <div class="ai-actions">
+            <button type="button" id="analyze-photo" class="secondary">Analizza foto</button>
+            <p id="ai-status" role="status" aria-live="polite">In attesa di foto.</p>
+          </div>
+          <label>
+            Numero lotto
+            <input type="text" name="lot" required placeholder="Es. L1234" />
+          </label>
+          <label>
+            Data di scadenza
+            <input type="date" name="expiry" required />
+          </label>
+        </div>
+        <div class="form-actions">
+          <button type="submit">Salva prodotto</button>
+          <button type="reset" class="ghost">Annulla</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="card" aria-labelledby="product-list-title">
+      <div class="card-header">
+        <h2 id="product-list-title">Lista prodotti</h2>
+        <p>Consulta, modifica o elimina un prodotto.</p>
+      </div>
+      <div id="product-list" class="product-list" role="list"></div>
+    </section>
+
+    <section class="card" aria-labelledby="product-detail-title">
+      <div class="card-header">
+        <h2 id="product-detail-title">Dettaglio prodotto</h2>
+        <p>Seleziona un prodotto dalla lista per visualizzarne i dati.</p>
+      </div>
+      <div id="product-detail" class="product-detail" aria-live="polite">
+        <p>Nessun prodotto selezionato.</p>
+      </div>
+    </section>
+  </main>
+
+  <div class="modal" id="edit-modal" role="dialog" aria-modal="true" aria-labelledby="edit-title" hidden>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="edit-title">Modifica prodotto</h2>
+        <button type="button" class="ghost" id="close-modal" aria-label="Chiudi">✕</button>
+      </div>
+      <form id="edit-form">
+        <div class="form-grid">
+          <label>
+            Nome prodotto
+            <input type="text" name="name" required />
+          </label>
+          <label>
+            Fornitore
+            <input type="text" name="supplier" required />
+          </label>
+          <label>
+            Tipologia
+            <input type="text" name="category" required />
+          </label>
+          <label>
+            Modalità di conservazione
+            <input type="text" name="storage" required />
+          </label>
+          <label>
+            Numero lotto
+            <input type="text" name="lot" required />
+          </label>
+          <label>
+            Data di scadenza
+            <input type="date" name="expiry" required />
+          </label>
+        </div>
+        <div class="form-actions">
+          <button type="submit">Salva modifiche</button>
+          <button type="button" class="ghost" id="cancel-edit">Annulla</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
