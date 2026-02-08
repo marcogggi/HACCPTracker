@@ -16,7 +16,17 @@ let editingId = null;
 
 function loadProducts() {
   const raw = localStorage.getItem(storageKey);
-  return raw ? JSON.parse(raw) : [];
+  if (!raw) {
+    return [];
+  }
+
+  try {
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (error) {
+    console.warn("Impossibile leggere i prodotti salvati.", error);
+    return [];
+  }
 }
 
 function saveProducts() {
@@ -144,7 +154,11 @@ function formatDate(value) {
   if (!value) {
     return "-";
   }
-  return new Date(value).toLocaleDateString("it-IT");
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) {
+    return "-";
+  }
+  return date.toLocaleDateString("it-IT");
 }
 
 function simulateAiExtraction(file) {
@@ -158,10 +172,9 @@ function simulateAiExtraction(file) {
   setTimeout(() => {
     const now = new Date();
     const expiryDate = new Date(now.setMonth(now.getMonth() + 2));
-    const lotHint = file.name
-      .replace(/\.[^/.]+$/, "")
-      .toUpperCase()
-      .slice(0, 8) || "L" + Math.floor(Math.random() * 9000 + 1000);
+    const lotHint =
+      file.name.replace(/\.[^/.]+$/, "").toUpperCase().slice(0, 8) ||
+      `L${Math.floor(Math.random() * 9000 + 1000)}`;
 
     productForm.lot.value = lotHint;
     productForm.expiry.value = expiryDate.toISOString().split("T")[0];
@@ -174,7 +187,7 @@ productForm.addEventListener("submit", (event) => {
 
   const formData = new FormData(productForm);
   const newProduct = {
-    id: crypto.randomUUID(),
+    id: createId(),
     name: formData.get("name"),
     supplier: formData.get("supplier"),
     category: formData.get("category"),
@@ -234,3 +247,10 @@ cancelEditButton.addEventListener("click", closeEdit);
 
 renderList();
 renderDetail();
+
+function createId() {
+  if (crypto?.randomUUID) {
+    return crypto.randomUUID();
+  }
+  return `id-${Date.now()}-${Math.floor(Math.random() * 10000)}`;
+}

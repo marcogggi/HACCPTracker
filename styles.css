@@ -150,6 +150,12 @@ button.ghost {
   margin: 0;
 }
 
+.hint {
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin: 0;
+}
+
 .product-list {
   display: grid;
   gap: 12px;
